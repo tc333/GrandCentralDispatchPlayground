@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <playground version='6.0' target-platform='macos'>
     <pages>
-        <page name='QOS - Async Execution'/>
-        <page name='QOS - Synchronous Execution'/>
+        <page name='Global Queue - Asynchronous Execution'/>
+        <page name='Global Queue - Synchronous Execution'/>
+        <page name='Global Queues - Priority'/>
+        <page name='Custom Queue - FIFO'/>
+        <page name='Custom Queue - Concurrent'/>
     </pages>
 </playground>
