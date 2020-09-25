@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<playground version='6.0' target-platform='macos'>
+<playground version='6.0' target-platform='ios' display-mode='rendered'>
     <pages>
-        <page name='Global Queue - Asynchronous Execution'/>
-        <page name='Global Queue - Synchronous Execution'/>
-        <page name='Global Queues - Priority'/>
-        <page name='Custom Queue - FIFO'/>
-        <page name='Custom Queue - Concurrent'/>
+        <page name='Synchronous Execution'/>
+        <page name='Asynchronous Execution'/>
+        <page name='Quality of Service'/>
+        <page name='Serial Execution'/>
+        <page name='Concurrent Execution'/>
+        <page name='Dispatch Group'/>
+        <page name='Dispatch Semaphore'/>
+        <page name='Deadlock'/>
+        <page name='Race Conditions'/>
     </pages>
 </playground>

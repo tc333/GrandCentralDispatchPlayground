@@ -8,3 +8,12 @@ public func printMultiples(of n: Int, upTo upperBound: Int, withEmoji emoji: Str
         }
     }
 }
+
+
+public typealias Seconds = Int
+public func asyncWork(withDelay: Seconds, completion: @escaping () -> Void) {
+    let deadline = DispatchTime.now().advanced(by: .seconds(withDelay))
+    DispatchQueue.global(qos: .utility).asyncAfter(deadline: deadline) {
+        completion()
+    }
+}
