@@ -1,53 +1,65 @@
 //: [Previous](@previous)
-
+/*:
+ # Dispatch Semaphore
+*/
 import Foundation
 
-let semaphore = DispatchSemaphore(value: 0)
-var sharedResource: [Int] = []
-
-let queue1 = DispatchQueue.global(qos: .background)
-
-queue1.async {
-    asyncWork {
-        sharedResource.append(1)
-        print("Finished first block")
-//        semaphore.signal()
-        print(sharedResource)
-    }
-//    semaphore.wait()
+class ViewController {
     
-    asyncWork {
-        sharedResource.removeLast()
-        print("Finished second block")
-//        semaphore.signal()
-        print(sharedResource)
-    }
-//    semaphore.wait()
+    private var sharedResource: [String] = []
+    private let semaphore = DispatchSemaphore(value: 1)
+    private let queue = DispatchQueue.global(qos: .utility)
     
-    asyncWork {
-        sharedResource += [1, 2, 3 ,4]
-        print("Finished third block")
-//        semaphore.signal()
-        print(sharedResource)
+    func viewDidLoad() {
+        let group = DispatchGroup()
+        
+        group.enter()
+        queue.async(group: group) {
+            self.getNextString {
+                group.leave()
+            }
+        }
+        
+        group.enter()
+        queue.async {
+            self.removeFirstString {
+                group.leave()
+            }
+        }
+        
+        group.notify(queue: .main) {
+            print("All work completed.")
+        }
     }
-//    semaphore.wait()
+    
+    func getNextString(completion: @escaping () -> Void) {
+//        semaphore.wait()
+        let randomNum = Int.random(in: 1...4)
+        asyncWork(withDelay: randomNum) {
+            let nextString = UUID().uuidString
+            print("Added new string: \(nextString)")
+            self.sharedResource.append(nextString)
+//            self.semaphore.signal()
+            completion()
+        }
+    }
+    
+    func removeFirstString(completion: @escaping () -> Void) {
+//        semaphore.wait()
+        let randomNum = Int.random(in: 1...4)
+        asyncWork(withDelay: randomNum) {
+            print("Removing first string")
+            self.sharedResource.remove(at: 0)
+//            self.semaphore.signal()
+            completion()
+        }
+    }
 }
 
-
+let controller = ViewController()
+controller.viewDidLoad()
+/*:
+ #### Result
+ Since the `sharedResource` is being accessed and mutated from 2 asynchronous blocks run from the same queue, a race condition is created that sometimes causes a fatal error and sometimes executes as intended.
+*/
 //: [Next](@next)
-
-
-class Controller {
-    var saveWorkItem: DispatchWorkItem?
-    
-    func save() {
-        saveWorkItem?.cancel()
-        saveWorkItem = DispatchWorkItem {
-            print("saved")
-        }
-        let time = DispatchTime(uptimeNanoseconds: 5 * 1000000000)
-        if let workItem = saveWorkItem {
-            DispatchQueue.global(qos: .background).asyncAfter(deadline: time, execute: workItem)
-        }
-    }
-}

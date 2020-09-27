@@ -8,7 +8,7 @@ import UIKit
 let group1 = DispatchGroup()
 
 group1.enter()
-asyncWork(withDelay: 5) {
+asyncWork(withDelay: 4) {
     print("Finished block 1")
     group1.leave()
 }
